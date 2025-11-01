@@ -1,0 +1,15 @@
+spring:
+  # Environmental variables for logins, pw and url's
+  r2dbc:
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+  flyway:
+    user: ${spring.r2dbc.username}
+    password: ${spring.r2dbc.password}
+    url: ${FLYWAY_DB_URL}
+
+external:
+  course-service-url: ${COURSE_SERVICE_URL}
+  #   # Increase Timeout to connect to Course Service
+  default-timeout: 5s

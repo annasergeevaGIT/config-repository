@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    # Environmental variables for logins, pw and url's
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+  jpa:
+    show_sql: false # dont show sql queries

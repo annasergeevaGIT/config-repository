@@ -1,0 +1,111 @@
+server:
+  port: 8083
+  # говорим серверу, чтобы при получении сигнала SIGTERM он более не принимал
+  # новые запросы, но при этом выполнил те, что уже в работе в течение времени,
+  # которое указано в настройке spring.lifecycle.timeout-per-shutdown-phase
+  # по умолчанию 30 секунд
+  # подробнее тут: https://habr.com/en/companies/maxilect/articles/666090/
+  shutdown: graceful
+  tomcat:
+    # говорим Tomcat сколько времени ждать после открытия соединения до получения запроса.
+    # Может быть полезно для защиты от DoS атак, когда клиент устанавливает соединение,
+    # сервер выделяет поток для его обработки, но запрос не приходит.
+    # Это же время Tomcat будет тратить на чтение тела запроса.
+    connection-timeout: 3s
+    # время, в течение которого Tomcat удерживает соединение открытым, ожидая новых запросов
+    keep-alive-timeout: 20s
+    # Tomcat использует пул потоков для обработки входящих соединений: одно соединение - один поток.
+    # По умолчанию макимальное количество потоков в пуле - 200.
+    threads:
+      max: 200
+      # минимальное количество потоков, которые будут созданы в пуле при старте сервера
+      min-spare: 10
+spring:
+  application:
+    name: feedback-service
+  lifecycle:
+    timeout-per-shutdown-phase: 30s # время, в течение которого текущие запросы будут отрабатываться после получения сигнала SIGTERM
+  datasource:
+    username: user
+    password: password
+    url: jdbc:postgresql://localhost:6433/feedback_service_db
+    hikari:
+      # таймаут на получение соединения из пула соединений
+      connection-timeout: 2000 # в миллисекундах
+      # по умолчанию в приложении используется пул соединений с БД HikariCP.
+      # его размер конфигурируется этой настройкой. Специалисты команды HikariCP рекомендуют
+      # устанавливать количество соединений, исходя из формулы:
+      # connections = ((core_count * 2) + effective_spindle_count)
+      # где core_count - количество ядер процессора
+      # effective_spindle_count - количество вращающихся дисков
+      # Так как мы предполагаем, что будет использоваться SSD, вращающихся дисков не будет,
+      # поэтому effective_spindle_count = 0
+      # Мы также предполагаем, что количество ядер = 4, следовательно maximum-pool-size = 8
+      # более подробно тут: https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+      maximum-pool-size: 8
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        # говорим hibernate, чтобы выводимые в логи sql запросы были отфрматированы для удобства чтения
+        format_sql: true
+        # говорим hibernate показывать sql запросы в логах (для отладки и тестирования)
+        show_sql: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+api:
+  feedback-create:
+    summary: Create feedback for a course
+    description: |
+      Creates feedback for a course and saves it in the database. It also updates the course rating
+      based on the user's submitted score. 
+      Returns information about the created feedback, including its identifier.
+      A user can create only one feedback per course.
+  feedback-get:
+    summary: Get feedback
+    description: Returns information about the feedback by its identifier.
+  user-feedbacks-get:
+    summary: Get a list of user feedbacks
+    description: |
+      Returns a list of feedbacks submitted by a user. The list may be empty if
+      the user has not left any feedback.
+      The list is sorted according to the specified sorting parameter.
+      Available sorting parameters:
+      date_asc - sorts by feedback creation date in ascending order
+      date_desc - sorts by feedback creation date in descending order
+  course-feedbacks-get:
+    summary: Get a list of feedbacks for a course, including its rating and average score
+    description: |
+      Returns a list of feedbacks for a specific course.
+      The list is sorted by creation date in ascending or descending order.
+      The list may be empty if the course has no feedback. In this case, the course's rating and
+      average score are equal to 0.0.
+      The response body also contains information about the course rating,
+      calculated using the Wilson Score Confidence Interval method.
+  ratings-get:
+    summary: Get information about course ratings and average scores
+    description: |
+      Returns information about the ratings and average scores of courses whose identifiers
+      are passed in the request body. If a course has no feedback with a score, its rating and 
+      average score are equal to 0.0.
+
+  response:
+    createOk: Feedback created successfully.
+    createConflict: Feedback was not created because the user has already left feedback for this course.
+    createBadRequest: Feedback was not created because the request contains errors. See the error message for details.
+    getOk: Feedback successfully found.
+    notFound: Feedback with the specified identifier was not found in the database.
+    getBadRequest: Unable to retrieve feedback information due to invalid request parameters. See the error message for details.
+    getUserReviewsOk: User feedback list successfully generated.
+    getUserReviewsBadRequest: Unable to generate user feedback list due to validation errors in request parameters. See the error message for details.
+    getCourseReviewsOk: Course feedback list successfully generated.
+    getCourseReviewsBadRequest: Unable to generate course feedback list due to validation errors in request parameters. See the error message for details.
+    getRatingsOk: List of course ratings and average scores successfully generated.
+    getRatingsBadRequest: Unable to generate list of course ratings and average scores due to validation errors in request parameters. See the error message for details.

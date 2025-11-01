@@ -1,0 +1,6 @@
+external:
+  # Environmental variables for logins, pw and url's
+  course-service-url: ${COURSE_SERVICE_URL}
+  feedback-service-url: ${FEEDBACK_SERVICE_URL}
+  # Increase Timeout
+  default-timeout: 5s

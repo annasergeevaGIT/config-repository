@@ -1,0 +1,68 @@
+server:
+  port: 8082
+  shutdown: graceful
+  netty:
+    # время ожидания установки TCP соединения с сервером
+    connection-timeout: 3s
+    # время ожидания до закрытия TCP соединения, по которому не передаются данные
+    idle-timeout: 20s
+
+spring:
+  application:
+    name: enrollment-service
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  r2dbc:
+    username: user
+    password: password
+    url: r2dbc:postgresql://localhost:6432/enrollment_service_db
+    pool:
+      # максимальное время ожидания получения соединения с базой
+      max-create-connection-time: 2s
+      # изначальный размер пула соединений
+      initial-size: 4
+      # максимальный размер пула соединений
+      max-size: 8
+  flyway:
+    user: ${spring.r2dbc.username}
+    password: ${spring.r2dbc.password}
+    url: jdbc:postgresql://localhost:6432/enrollment_service_db
+
+external:
+  # url для связи с Course Service
+  course-service-url: "http://localhost:8081"
+  # путь эндпоинта для получения информации о доступности и ценах courses
+  course-info-path: "/v1/courses/course-info"
+  # таймаут, который будет использоваться при связи с Course Service, чтобы не ожидать ответа вечно
+  default-timeout: 2s
+  # время ожидания перед тем, как совершить повторную попытку получить данные из Course Service
+  retry-backoff: 100ms
+  # количество повторных попыток связи с Course Service
+  retry-count: 5
+  # фактор неопределенности для того, чтобы минимизировать возможность сценария,
+  # при котором несколько инстансов Enrolment Service будут одновременно посылать ретраи в Course Service.
+  retry-jitter: 0.75
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+api:
+  submit-enrollment:
+    summary: Create a new enrollment
+    description: |
+      Creates a new enrollment for the specified user. 
+      Course names are passed in the request body. 
+      If any course is missing in the Course Service, a 500 error is returned.
+  get-enrollments:
+    summary: Get a list of user enrollments
+    description: Returns a list of user enrollments, sorted by the enrollment creation date.
+  response:
+    submitOk: Enrollment successfully created.
+    submitBadRequest: Enrollment was not created due to an error in the request. See the error message for details.
+    submitNotFound: Enrollment was not created because some of the courses are missing in the catalog.
+    submitInternalError: Enrollment was not created due to a server error. See the error message for details.
+    getOk: List of user enrollments successfully generated.
+    getBadRequest: Failed to generate list of user enrollments due to invalid request parameters.

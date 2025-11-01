@@ -1,0 +1,111 @@
+server:
+  port: 8081
+  # говорим серверу, чтобы при получении сигнала SIGTERM он более не принимал
+  # новые запросы, но при этом выполнил те, что уже в работе в течение времени,
+  # которое указано в настройке spring.lifecycle.timeout-per-shutdown-phase
+  # по умолчанию 30 секунд
+  # подробнее тут: https://habr.com/en/companies/maxilect/articles/666090/
+  shutdown: graceful
+  tomcat:
+    # говорим Tomcat сколько времени ждать после открытия соединения до получения запроса.
+    # Может быть полезно для защиты от DoS атак, когда клиент устанавливает соединение,
+    # сервер выделяет поток для его обработки, но запрос не приходит.
+    # Это же время Tomcat будет тратить на чтение тела запроса.
+    connection-timeout: 3s
+    # время, в течение которого Tomcat удерживает соединение открытым, ожидая новых запросов
+    keep-alive-timeout: 20s
+    # Tomcat использует пул потоков для обработки входящих соединений: одно соединение - один поток.
+    # По умолчанию макимальное количество потоков в пуле - 200.
+    threads:
+      max: 200
+      # минимальное количество потоков, которые будут созданы в пуле при старте сервера
+      min-spare: 10
+spring:
+  application:
+    name: course-service
+  lifecycle:
+    timeout-per-shutdown-phase: 30s # время, в течение которого текущие запросы будут отрабатываться после получения сигнала SIGTERM
+  datasource:
+    username: user
+    password: password
+    url: jdbc:postgresql://localhost:6431/course_service_db
+    hikari:
+      # таймаут на получение соединения из пула соединений
+      connection-timeout: 2000 # в миллисекундах
+      # по умолчанию в приложении используется пул соединений с БД HikariCP.
+      # его размер конфигурируется этой настройкой. Специалисты команды HikariCP рекомендуют
+      # устанавливать количество соединений, исходя из формулы:
+      # connections = ((core_count * 2) + effective_spindle_count)
+      # где core_count - количество ядер процессора
+      # effective_spindle_count - количество вращающихся дисков
+      # Так как мы предполагаем, что будет использоваться SSD, вращающихся дисков не будет,
+      # поэтому effective_spindle_count = 0
+      # Мы также предполагаем, что количество ядер = 4, следовательно maximum-pool-size = 8
+      # более подробно тут: https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+      maximum-pool-size: 8
+  jpa:
+    open-in-view: false
+    hibernate:
+      # говорим hibernate, что необходимо провалидировать соответствие схемы БД и JPA модели
+      ddl-auto: validate
+    properties:
+      hibernate:
+        # говорим hibernate, чтобы выводимые в логи sql запросы были отфрматированы для удобства чтения
+        format_sql: true
+        # говорим hibernate показывать sql запросы в логах (для отладки и тестирования)
+        show_sql: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+api:
+  course-create:
+    summary: Create a course
+    description: |
+      Creates a course and saves it in the database.
+      Returns information about the created course, including its identifier.
+  course-delete:
+    summary: Delete a course
+    description: Deletes a course by its identifier.
+  course-update:
+    summary: Update a course
+    description: Updates a course according to the parameters provided in the request body.
+  course-get:
+    summary: Get a course
+    description: Returns information about a course by its identifier.
+  course-list-get:
+    summary: Get a list of courses
+    description: |
+      Returns a list of courses from the specified category. The list may be empty if there are no courses in that category.
+      Available categories: engineering, science, design, management, arts.
+      The list is sorted according to the specified sorting parameter.
+      Available sorting parameters:
+      az - sorts by name in ascending alphabetical order
+      za - sorts by name in descending alphabetical order
+      price_asc - sorts by price in ascending order
+      price_desc - sorts by price in descending order
+      date_asc - sorts by creation date in ascending order
+      date_desc - sorts by creation date in descending order
+  course-info:
+    summary: Get information about course prices and availability
+    description: |
+      Returns information about the price, name, and availability of a course.
+      If a course is not available, its price is represented as a null value.
+      Although the semantics of the request fully correspond to an HTTP GET request,
+      the POST method is used because the request body may contain a long list of course names.
+  response:
+    createOk: Course created successfully.
+    createConflict: Course was not created because a course with the same name already exists in the database.
+    createBadRequest: Course was not created because the request contains errors. See the error message for details.
+    deleteNoContent: The course with this identifier has been removed from the database.
+    updateOk: Course successfully updated.
+    notFound: Course with this identifier not found in the database.
+    updateBadRequest: Course was not updated because the request contains errors. See the error message for details.
+    getOk: Course successfully found.
+    getListOk: The list of courses by category has been successfully generated.
+    getListBadRequest: The list of courses could not be generated because the request contains invalid parameters.
+    getCourseInfoBadRequest: Information about courses could not be generated because the request contains invalid parameters (the list of names is empty).
+    getCourseInfoOk: Information about courses successfully generated.
