@@ -74,30 +74,31 @@ springdoc:
 
 api:
   get-aggregate:
-    summary: Получение подробной информации о блюде по его идентификатору.
+    summary: Get detailed information about a course by its identifier
     description: |
-      Предоставляет информацию о блюде, пользовательских отзывах к нему, а также рейтинге блюда.
-      В случае невозможности получить информацию о рейтинге и отзывах пользователя предоставляется
-      частичный ответ с указанием на ошибку загрузки данных. 
-      Список отзывов отсортирован и пагинирован согласно параметрам запроса. 
-      Варианты сортировки:
-      - date_asc - по дате создания от старых к новым
-      - date_desc - по дате создания от новых к старым
+      Provides information about a course, user feedback on it, and its rating.
+      If it is not possible to retrieve the rating or user feedback information, 
+      a partial response is returned indicating an error while loading the data.
+      The list of feedback entries is sorted and paginated according to the request parameters.
+      Sorting options:
+      - date_asc — by creation date, from oldest to newest
+      - date_desc — by creation date, from newest to oldest
   get-aggregate-list:
-    summary: Получение списка блюд и их рейтингов из конкретной категории.
+    summary: Get a list of courses and their ratings from a specific category
     description: |
-      Предоставляет список блюд, содержащий дополнительную информацию о каждом блюде:
-      - рейтинг
-      - средняя оценка
-      Список отсортирован согласно параметрам запроса.
-      Варианты сортировки: 
-      - az / za - по алфафиту
-      - date_asc / date_desc - по дате создания
-      - price_asc / price_desc - по цене
-      - rate_asc / rate_desc - по рейтингу
+      Provides a list of courses containing additional information for each course:
+      - rating
+      - average score
+      The list is sorted according to the request parameters.
+      Sorting options:
+      - az / za — by name alphabetically or in reverse order
+      - date_asc / date_desc — by creation date
+      - price_asc / price_desc — by price
+      - rate_asc / rate_desc — by rating
   response:
-    getAggregateOk: Информация о блюде успешно сформирована.
-    getAggregateListOk: Список блюд успешно сформирован.
-    notFound: Блюдо по указанному идентификатору не найдено.
-    badRequest: Ответ не был сформирован из-за ошибки во входящих параметрах. Подробнее в сообщении об ошибке.
-    serviceUnavailable: Ответ не был сформирован из-за недоступности одной из внешних систем. Подробнее в сообщении об ошибке.
+    getAggregateOk: Course information successfully generated.
+    getAggregateListOk: List of courses successfully generated.
+    notFound: Course with the specified identifier not found.
+    badRequest: Response could not be generated due to invalid request parameters. See the error message for details.
+    serviceUnavailable: Response could not be generated because one of the external systems is unavailable. See the error message for details.
+
