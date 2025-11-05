@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 9093
   # говорим серверу, чтобы при получении сигнала SIGTERM он более не принимал
   # новые запросы, но при этом выполнил те, что уже в работе в течение времени,
   # которое указано в настройке spring.lifecycle.timeout-per-shutdown-phase
@@ -28,7 +28,7 @@ spring:
   datasource:
     username: user
     password: password
-    url: jdbc:postgresql://localhost:6433/feedback_service_db
+    url: jdbc:postgresql://localhost:5433/feedback_service_db
     hikari:
       # таймаут на получение соединения из пула соединений
       connection-timeout: 2000 # в миллисекундах

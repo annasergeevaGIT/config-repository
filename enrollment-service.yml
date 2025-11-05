@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 9092
   shutdown: graceful
   netty:
     # время ожидания установки TCP соединения с сервером
@@ -15,7 +15,7 @@ spring:
   r2dbc:
     username: user
     password: password
-    url: r2dbc:postgresql://localhost:6432/enrollment_service_db
+    url: r2dbc:postgresql://localhost:15432/enrollment_service_db
     pool:
       # максимальное время ожидания получения соединения с базой
       max-create-connection-time: 2s
@@ -26,11 +26,11 @@ spring:
   flyway:
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
-    url: jdbc:postgresql://localhost:6432/enrollment_service_db
+    url: jdbc:postgresql://localhost:15432/enrollment_service_db
 
 external:
   # url для связи с Course Service
-  course-service-url: "http://localhost:8081"
+  course-service-url: "http://localhost:9091"
   # путь эндпоинта для получения информации о доступности и ценах courses
   course-info-path: "/v1/courses/course-info"
   # таймаут, который будет использоваться при связи с Course Service, чтобы не ожидать ответа вечно

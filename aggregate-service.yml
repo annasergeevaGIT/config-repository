@@ -1,5 +1,5 @@
 server:
-  port: 8084
+  port: 9094
   shutdown: graceful
   netty:
     connection-timeout: 3s
@@ -12,8 +12,8 @@ spring:
     timeout-per-shutdown-phase: 30s
 
 external:
-  course-service-url: "http://localhost:8081"
-  feedback-service-url: "http://localhost:8083"
+  course-service-url: "http://localhost:9091"
+  feedback-service-url: "http://localhost:9093"
   course-item-path: "/v1/courses"
   course-feedbacks-path: "/v1/feedbacks/course"
   course-ratings-path: "/v1/feedbacks/ratings"
