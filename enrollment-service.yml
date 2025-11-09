@@ -45,6 +45,24 @@ kafkaprops:
   order-dispatch-topic: v1.enrollments_dispatch
   nack-sleep-duration: 100ms
 
+  kafka:
+    bootstrap-servers: localhost:9097
+    consumer:
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
+        schema.registry.url: http://localhost:8081
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+    listener:
+      ack-mode: manual
+
+  kafkaprops:
+    enrollment-dispatch-topic: v1.enrollments_dispatch
+    nack-sleep-duration: 100ms
+
 external:
   # url для связи с Course Service
   course-service-url: "http://localhost:9091"
