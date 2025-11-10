@@ -2,9 +2,9 @@ server:
   port: 9092
   shutdown: graceful
   netty:
-    # время ожидания установки TCP соединения с сервером
+    # tcp server connection timeout
     connection-timeout: 3s
-    # время ожидания до закрытия TCP соединения, по которому не передаются данные
+    # tcp server connection timeout when no data is transmitted
     idle-timeout: 20s
 
 spring:
@@ -17,11 +17,9 @@ spring:
     password: password
     url: r2dbc:postgresql://localhost:15432/enrollment_service_db
     pool:
-      # максимальное время ожидания получения соединения с базой
+      # max timeout connection to the db
       max-create-connection-time: 2s
-      # изначальный размер пула соединений
       initial-size: 4
-      # максимальный размер пула соединений
       max-size: 8
   flyway:
     user: ${spring.r2dbc.username}
@@ -46,18 +44,16 @@ kafkaprops:
   nack-sleep-duration: 100ms
 
 external:
-  # url для связи с Course Service
   course-service-url: "http://localhost:9091"
-  # путь эндпоинта для получения информации о доступности и ценах courses
+  # endpoint to collect data about prices and courses
   course-info-path: "/v1/courses/course-info"
-  # таймаут, который будет использоваться при связи с Course Service, чтобы не ожидать ответа вечно
+  # connection timeout for Course Service
   default-timeout: 2s
-  # время ожидания перед тем, как совершить повторную попытку получить данные из Course Service
+  # waitie till retry time for Course Service
   retry-backoff: 100ms
-  # количество повторных попыток связи с Course Service
+  # amount of tries to connect to Course Service
   retry-count: 5
-  # фактор неопределенности для того, чтобы минимизировать возможность сценария,
-  # при котором несколько инстансов Enrolment Service будут одновременно посылать ретраи в Course Service.
+  # factor to minimize the possibility of a scenario where several instances of the Enrollment Service would simultaneously send retries to the Course Service
   retry-jitter: 0.75
 
 springdoc:

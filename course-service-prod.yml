@@ -5,4 +5,10 @@ spring:
     password: ${DB_PASSWORD}
     url: ${DB_URL}
   jpa:
-    show_sql: false # dont show sql queries
+    properties:
+      hibernate:
+        show_sql: false
+
+external:
+  discovery-service-url: ${DISCOVERY_SERVICE_URL}
+

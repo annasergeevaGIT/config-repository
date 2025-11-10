@@ -19,3 +19,9 @@ external:
   course-service-url: ${COURSE_SERVICE_URL}
   #   # Increase Timeout to connect to Course Service
   default-timeout: 5s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
