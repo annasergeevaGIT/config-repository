@@ -51,8 +51,8 @@ resilience4j:
         # указанное в параметре sliding-window-size время.
         minimum-number-of-calls: 15
     instances:
-      # Определяем CircuitBreaker, который будет использоваться в MenuClient
-      menuBackend:
+      # Определяем CircuitBreaker, который будет использоваться в CourseClient
+      courseBackend:
         base-config: default
       # Определяем CircuitBreaker, который будет использоваться в ReviewsClient
       reviewBackend:
