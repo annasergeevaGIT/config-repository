@@ -16,7 +16,7 @@ spring:
         schema.registry.url: ${SCHEMA_REGISTRY_URL}
 
 external:
-  course-service-url: ${COURSE_SERVICE_URL}
+  discovery-service-url: ${DISCOVERY_SERVICE_URL}
   #   # Increase Timeout to connect to Course Service
   default-timeout: 5s
 
