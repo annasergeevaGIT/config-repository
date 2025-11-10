@@ -24,8 +24,8 @@ eureka:
 
 external:
   discovery-service-url: http://localhost:8761/eureka/
-  course-service-url: "http://localhost:9091"
-  feedback-service-url: "http://localhost:9093"
+  course-service-url: "http://course-service"
+  feedback-service-url: "http://feedback-service"
   course-item-path: "/v1/courses"
   course-feedbacks-path: "/v1/feedbacks/course"
   course-ratings-path: "/v1/feedbacks/ratings"
