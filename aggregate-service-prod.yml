@@ -1,6 +1,11 @@
 external:
-  # Environmental variables for logins, pw and url's
-  course-service-url: ${COURSE_SERVICE_URL}
-  feedback-service-url: ${FEEDBACK_SERVICE_URL}
-  # Increase Timeout
+  # use env variables for logins pw and urls
+  discovery-service-url: ${DISCOVERY_SERVICE_URL}
+  # increase timeout
   default-timeout: 5s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
