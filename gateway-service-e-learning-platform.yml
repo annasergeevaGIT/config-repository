@@ -87,7 +87,7 @@ spring:
             scope: openid,roles
         provider:
           keycloak:
-            issuer-uri: ${external.keycloak-url}v
+            issuer-uri: ${external.keycloak-url}
 
 resilience4j:
   circuitbreaker:
