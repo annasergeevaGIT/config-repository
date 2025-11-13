@@ -8,7 +8,6 @@ spring:
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
     url: ${FLYWAY_DB_URL}
-
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
@@ -20,6 +19,8 @@ external:
   #   # Increase Timeout to connect to Course Service
   default-timeout: 5s
   zipkin-endpoint: ${ZIPKIN_URL}
+  keycloak-url: ${KEYCLOAK_URL}
+  jwk-set-url: ${JWK_SET_URL}
 
 management:
   endpoints:

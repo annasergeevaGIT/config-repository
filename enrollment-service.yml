@@ -25,6 +25,13 @@ spring:
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
     url: jdbc:postgresql://localhost:15432/enrollment_service_db
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${external.keycloak-url}
+          jwk-set-uri: ${external.jwk-set-url}
   kafka:
     bootstrap-servers: localhost:9097
     consumer:
@@ -68,6 +75,8 @@ external:
   # factor to minimize the possibility of a scenario where several instances of the Enrollment Service would simultaneously send retries to the Course Service
   retry-jitter: 0.75
   zipkin-endpoint: http://localhost:9411/api/v2/spans
+  keycloak-url: http://keycloak:8080/realms/cloud-java
+  jwk-set-url: http://keycloak:8080/realms/cloud-java/protocol/openid-connect/certs
 
 management:
   endpoints:
