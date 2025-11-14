@@ -20,3 +20,4 @@ external:
   #   # Increase Timeout to connect to Course Service
   default-timeout: 5s
   zipkin-endpoint: ${ZIPKIN_URL}
+  loki-url: ${LOKI_URL}
