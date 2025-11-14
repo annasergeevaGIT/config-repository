@@ -10,4 +10,5 @@ spring:
 external:
   discovery-service-url: ${DISCOVERY_SERVICE_URL}
   zipkin-endpoint: ${ZIPKIN_URL}
+  loki-url: ${LOKI_URL}
 
