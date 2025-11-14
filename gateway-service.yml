@@ -7,7 +7,7 @@ server:
 
 spring:
   application:
-    name: gateway-service-e-learning-platform
+    name: gateway-service
   lifecycle:
     timeout-per-shutdown-phase: 30s
   cloud:
@@ -36,39 +36,38 @@ spring:
                   burstCapacity: 20
                   requestedTokens: 1
           routes:
-            - id: course-service-route
-              uri: lb://course-service
+            - id: menu-service-route
+              uri: lb://menu-service
               predicates:
-                - Path=/v1/courses/**
+                - Path=/v1/menu-items/**
               filters:
                 - name: CircuitBreaker
                   args:
-                    name: courseServiceCircuitBreaker
-            - id: enrollment-service-route
-              uri: lb://enrollment-service
+                    name: menuServiceCircuitBreaker
+            - id: orders-service-route
+              uri: lb://orders-service
               predicates:
-                - Path=/v1/course-enrollments/**
+                - Path=/v1/menu-orders/**
               filters:
                 - name: CircuitBreaker
                   args:
-                    name: enrollmentServiceCircuitBreaker
-            - id: feedback-service-route
-              uri: lb://feedback-service
+                    name: ordersServiceCircuitBreaker
+            - id: review-service-route
+              uri: lb://review-service
               predicates:
-                - Path=/v1/feedbacks/**
+                - Path=/v1/reviews/**
               filters:
                 - name: CircuitBreaker
                   args:
-                    name: feedbackServiceCircuitBreaker
-            - id: aggregate-service-route
-              uri: lb://aggregate-service
+                    name: reviewServiceCircuitBreaker
+            - id: menu-aggregate-service-route
+              uri: lb://menu-aggregate-service
               predicates:
-                - Path=/v1/course-aggregate/**
+                - Path=/v1/menu-aggregate/**
               filters:
                 - name: CircuitBreaker
                   args:
-                    name: courseAggregateServiceCircuitBreaker
-
+                    name: menuAggregateServiceCircuitBreaker
   data:
     redis:
       connect-timeout: 3s
@@ -94,13 +93,13 @@ resilience4j:
         slow-call-duration-threshold: 5s
         minimum-number-of-calls: 15
     instances:
-      courseServiceCircuitBreaker:
+      menuServiceCircuitBreaker:
         base-config: default
-      enrollmentServiceCircuitBreaker:
+      ordersServiceCircuitBreaker:
         base-config: default
-      feedbackServiceCircuitBreaker:
+      reviewServiceCircuitBreaker:
         base-config: default
-      courseAggregateServiceCircuitBreaker:
+      menuAggregateServiceCircuitBreaker:
         base-config: default
   timelimiter:
     configs:
