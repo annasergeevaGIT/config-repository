@@ -4,9 +4,3 @@ external:
   # increase timeout
   default-timeout: 5s
   zipkin-endpoint: ${ZIPKIN_URL}
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh

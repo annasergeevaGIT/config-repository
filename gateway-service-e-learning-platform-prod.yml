@@ -1,0 +1,6 @@
+external:
+  discovery-service-url: ${DISCOVERY_SERVICE_URL}
+  redis-host: ${REDIS_HOST}
+  zipkin-endpoint: ${ZIPKIN_URL}
+  keycloak-url: ${KEYCLOAK_URL}
+  jwk-set-url: ${JWK_SET_URL}
