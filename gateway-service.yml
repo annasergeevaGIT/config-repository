@@ -36,38 +36,38 @@ spring:
                   burstCapacity: 20
                   requestedTokens: 1
           routes:
-            - id: menu-service-route
-              uri: lb://menu-service
+            - id: course-service-route
+              uri: lb://course-service
               predicates:
-                - Path=/v1/menu-items/**
+                - Path=/v1/courses/**
               filters:
                 - name: CircuitBreaker
                   args:
-                    name: menuServiceCircuitBreaker
-            - id: orders-service-route
-              uri: lb://orders-service
+                    name: courseServiceCircuitBreaker
+            - id: enrollment-service-route
+              uri: lb://enrollment-service
               predicates:
-                - Path=/v1/menu-orders/**
+                - Path=/v1/course-enrollments/**
               filters:
                 - name: CircuitBreaker
                   args:
-                    name: ordersServiceCircuitBreaker
-            - id: review-service-route
-              uri: lb://review-service
+                    name: enrollmentServiceCircuitBreaker
+            - id: feedback-service-route
+              uri: lb://feedback-service
               predicates:
-                - Path=/v1/reviews/**
+                - Path=/v1/feedbacks/**
               filters:
                 - name: CircuitBreaker
                   args:
-                    name: reviewServiceCircuitBreaker
-            - id: menu-aggregate-service-route
-              uri: lb://menu-aggregate-service
+                    name: feedbackServiceCircuitBreaker
+            - id: aggregate-service-route
+              uri: lb://aggregate-service
               predicates:
-                - Path=/v1/menu-aggregate/**
+                - Path=/v1/course-aggregate/**
               filters:
                 - name: CircuitBreaker
                   args:
-                    name: menuAggregateServiceCircuitBreaker
+                    name: courseAggregateServiceCircuitBreaker
   data:
     redis:
       connect-timeout: 3s
@@ -93,13 +93,13 @@ resilience4j:
         slow-call-duration-threshold: 5s
         minimum-number-of-calls: 15
     instances:
-      menuServiceCircuitBreaker:
+      courseServiceCircuitBreaker:
         base-config: default
-      ordersServiceCircuitBreaker:
+      enrollmentsServiceCircuitBreaker:
         base-config: default
-      reviewServiceCircuitBreaker:
+      feedbackServiceCircuitBreaker:
         base-config: default
-      menuAggregateServiceCircuitBreaker:
+      courseAggregateServiceCircuitBreaker:
         base-config: default
   timelimiter:
     configs:
