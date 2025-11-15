@@ -139,9 +139,9 @@ api:
     getOk: Feedback successfully found.
     notFound: Feedback with the specified identifier was not found in the database.
     getBadRequest: Unable to retrieve feedback information due to invalid request parameters. See the error message for details.
-    getUserReviewsOk: User feedback list successfully generated.
-    getUserReviewsBadRequest: Unable to generate user feedback list due to validation errors in request parameters. See the error message for details.
-    getCourseReviewsOk: Course feedback list successfully generated.
-    getCourseReviewsBadRequest: Unable to generate course feedback list due to validation errors in request parameters. See the error message for details.
+    getUserFeedbacksOk: User feedback list successfully generated.
+    getUserFeedbacksBadRequest: Unable to generate user feedback list due to validation errors in request parameters. See the error message for details.
+    getCourseFeedbacksOk: Course feedback list successfully generated.
+    getCourseFeedbacksBadRequest: Unable to generate course feedback list due to validation errors in request parameters. See the error message for details.
     getRatingsOk: List of course ratings and average scores successfully generated.
     getRatingsBadRequest: Unable to generate list of course ratings and average scores due to validation errors in request parameters. See the error message for details.
