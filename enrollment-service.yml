@@ -90,16 +90,15 @@ management:
     distribution:
       percentiles-histogram:
         all: true
-#    enable:
-#      jvm: true
-#      http:
-#        server: true
-#      netty: true # reactive apps
-#      reactor: true # reactive apps
-#      r2dbc: true # reactive apps
-#      executor: true # only if using ThreadPoolTaskExecutor
-      # hikaricp: true
-      # tomcat: true
+    enable:
+      jvm: true
+      http:
+        server: true
+      netty: true # reactive apps
+      reactor: true # reactive apps
+      r2dbc: true # reactive apps
+#     hikaricp: true # non-reactive apps
+#     tomcat: true # non-reactive apps
 
 springdoc:
   api-docs:

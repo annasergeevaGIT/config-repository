@@ -90,13 +90,12 @@ management:
     distribution:
       percentiles-histogram:
         all: true
-#    enable:
-#      jvm: true
-#      http:
-#        server: true
-#      hikaricp: true
-#      tomcat: true
-#      executor: true
+    enable:
+      jvm: true
+      http:
+        server: true
+      hikaricp: true
+      tomcat: true
 
 springdoc:
   api-docs:
