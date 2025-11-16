@@ -1,9 +1,10 @@
 spring:
-  # Environmental variables for logins, pw and url's
-  r2dbc:
+  datasource: #replaced R2DBC
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     url: ${DB_URL}
+    hikari:
+      maximum-pool-size: 16
   flyway:
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}

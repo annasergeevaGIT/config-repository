@@ -1,26 +1,24 @@
 server:
   port: 9092
   shutdown: graceful
-  netty:
-    # tcp server connection timeout
+  tomcat: #replaced Netty
     connection-timeout: 3s
-    # tcp server connection timeout when no data is transmitted
-    idle-timeout: 20s
+    keep-alive-timeout: 20s
+    threads:
+      max: 200
+      min-spare: 10
 
 spring:
   application:
     name: enrollment-service
   lifecycle:
     timeout-per-shutdown-phase: 30s
-  r2dbc:
+  datasource: #replaced R2DBC
+    url: jdbc:postgresql://localhost:15432/enrollment_service_db
     username: user
     password: password
-    url: r2dbc:postgresql://localhost:15432/enrollment_service_db
-    pool:
-      # max timeout connection to the db
-      max-create-connection-time: 2s
-      initial-size: 4
-      max-size: 8
+    hikari:
+      maximum-pool-size: 16
   flyway:
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
@@ -38,6 +36,9 @@ spring:
       enable-auto-commit: false
     listener:
       ack-mode: manual
+  threads:
+    virtual:
+      enabled: true
 
 eureka:
   client:
@@ -94,11 +95,11 @@ management:
       jvm: true
       http:
         server: true
-      netty: true # reactive apps
-      reactor: true # reactive apps
-      r2dbc: true # reactive apps
-#     hikaricp: true # non-reactive apps
-#     tomcat: true # non-reactive apps
+      hikaricp: true # non-reactive
+      tomcat: true # non-reactive
+#      netty: true # reactive apps
+#      reactor: true # reactive apps
+#      r2dbc: true # reactive apps
 
 springdoc:
   api-docs:
