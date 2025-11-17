@@ -18,7 +18,8 @@ spring:
     username: user
     password: password
     hikari:
-      maximum-pool-size: 16
+      maximum-pool-size: 12
+      connection-timeout: 2000
   flyway:
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
