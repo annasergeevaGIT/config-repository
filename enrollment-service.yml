@@ -19,8 +19,8 @@ spring:
     pool:
       # max timeout connection to the db
       max-create-connection-time: 2s
-      initial-size: 4
-      max-size: 8
+      initial-size: 6
+      max-size: 12
   flyway:
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
